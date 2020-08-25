@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."libraryinventory_raw_dev"

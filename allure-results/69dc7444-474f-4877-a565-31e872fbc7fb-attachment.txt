@@ -1,0 +1,11 @@
+  2020-01-02 19:06:37,189 - Comparison - Column count verification
+  2020-01-02 19:06:37,190 - Comparison - --------------------------
+  2020-01-02 19:06:37,190 - Comparison - Column count of DEV Raw File: 5
+  2020-01-02 19:06:37,190 - Comparison - Column count of QA Raw File: 5
+  2020-01-02 19:06:37,190 - Comparison - Column count of both DEV Raw & QA Raw files is equal!!
+  2020-01-02 19:06:37,190 - Comparison -  
+  2020-01-02 19:06:37,191 - Comparison - Row count verification
+  2020-01-02 19:06:37,191 - Comparison - -----------------------
+  2020-01-02 19:06:37,191 - Comparison - Row count DEV Raw File: 1434
+  2020-01-02 19:06:37,192 - Comparison - Row count of QA Raw File: 601
+  2020-01-02 19:06:37,192 - Comparison - Row count of both DEV Raw & QA Raw is not equal!

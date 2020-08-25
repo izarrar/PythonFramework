@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."chartsofaccounts_raw_data"

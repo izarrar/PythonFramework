@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."major_processed_dev";

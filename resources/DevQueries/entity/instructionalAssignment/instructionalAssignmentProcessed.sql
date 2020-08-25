@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."instructionalassignment_process_data"

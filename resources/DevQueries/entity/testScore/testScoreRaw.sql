@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."testscore_raw_data"

@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."academictrack_raw_data"

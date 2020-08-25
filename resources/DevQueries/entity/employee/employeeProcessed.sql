@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."employee_processed_data"

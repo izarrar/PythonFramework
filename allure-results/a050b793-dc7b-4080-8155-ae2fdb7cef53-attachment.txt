@@ -1,0 +1,68 @@
+  2020-01-02 19:06:37,349 - Comparison - Data Comparison
+  2020-01-02 19:06:37,349 - Comparison - ----------------
+  2020-01-02 19:06:37,384 - Comparison - DEV Raw File & QA Raw File are not equal
+  2020-01-02 19:06:37,385 - Comparison - 
+  2020-01-02 19:06:37,385 - Comparison - Rows with unequal values between DEV Raw File & QA Raw File
+  2020-01-02 19:06:37,385 - Comparison - -----------------------------------------------------------------------
+  2020-01-02 19:06:37,388 - Comparison - 
+  2020-01-02 19:06:37,391 - Comparison -      benefitamount (DEV Raw)  benefitamount (QA Raw)
+167                    300.0                   250.0
+576                   1750.0                   167.0
+257                   1750.0                   250.0
+520                    200.0                  1085.0
+266                    750.0                   250.0
+196                   1225.0                  2000.0
+143                   1069.0                   600.0
+446                   1050.0                   681.0
+309                   1500.0                   397.0
+486                    580.0                   750.0
+  2020-01-02 19:06:37,411 - Comparison - 
+  2020-01-02 19:06:37,415 - Comparison -     benefittyperaw (DEV Raw) benefittyperaw (QA Raw)
+279                     FFPG                    FSEG
+327                     FFPG                    FSEG
+141                     FFPG                    FSEG
+287                     FFPG                    FSEG
+558                     FFPG                    FSEG
+514                     FFPG                    FSEG
+493                     FFPG                    FSEG
+191                     FFPG                    FSEG
+138                     FFPG                    FSEG
+136                     FFPG                    FSEG
+  2020-01-02 19:06:37,433 - Comparison - 
+  2020-01-02 19:06:37,436 - Comparison -      termcode (DEV Raw)  termcode (QA Raw)
+347              200510           200810.0
+109              199910           200410.0
+119              199910           200510.0
+366              200510           200810.0
+65               199810           199910.0
+189              200310           200510.0
+565              200620           201410.0
+299              200510           200710.0
+524              200610           201210.0
+303              200410           200720.0
+  2020-01-02 19:06:37,454 - Comparison - 
+  2020-01-02 19:06:37,458 - Comparison -     recordactivitydate (DEV Raw) recordactivitydate (QA Raw)
+424                     10/14/04                    05/29/09
+207                     03/26/03                    03/22/06
+320                     07/14/04                    03/08/07
+495                     10/31/05                    11/09/09
+17                      10/05/95                    02/10/98
+384                     09/09/04                    09/14/07
+224                     03/27/03                    01/29/06
+169                     02/15/02                    02/06/08
+488                     10/27/05                    09/25/09
+230                     05/11/03                    07/26/06
+  2020-01-02 19:06:37,475 - Comparison - 
+  2020-01-02 19:06:37,479 - Comparison -      personid (DEV Raw)  personid (QA Raw)
+190                1489             3571.0
+135                 916             2741.0
+562               30624            39305.0
+171                1363             3139.0
+131                 914             2635.0
+259                2124            31392.0
+499               30317            35974.0
+425                3173            33517.0
+245                2056            30956.0
+218                1852            30519.0
+  2020-01-02 19:06:37,493 - Utility - Exporting data to csv file...
+  2020-01-02 19:06:37,502 - Utility - Data has been exported to csv file successfully!

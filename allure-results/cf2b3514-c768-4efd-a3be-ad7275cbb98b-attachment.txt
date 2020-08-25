@@ -1,0 +1,5 @@
+  2020-01-02 19:06:41,536 - Comparison - RowGuID verification on DEV Processed File
+  2020-01-02 19:06:41,536 - Comparison - -----------------------------------------------------
+  2020-01-02 19:06:41,544 - Comparison - Count of row gui id & count of rows in data frame is equal! 
+ count : 1434
+  2020-01-02 19:06:41,544 - Comparison - There are no duplicate values in row gui id column

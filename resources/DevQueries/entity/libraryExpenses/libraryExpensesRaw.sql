@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."libraryexpenses_raw_data"

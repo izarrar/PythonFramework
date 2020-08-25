@@ -1,0 +1,40 @@
+SELECT
+  SGRCHRT_PIDM personId,
+  TO_CHAR(CAST(SGRCHRT_ACTIVITY_DATE AS TIMESTAMP WITH TIME ZONE), 'MM/DD/YYYY HH24:MI:SS') AS recordActivityDate,
+  SGRCHRT_TERM_CODE_EFF termCodeEffective,
+  CASE
+WHEN SGRCHRT_CREA_CODE IN ('04','08')THEN 'Died'
+WHEN SGRCHRT_CREA_CODE IN ('MED') THEN 'Medical Leave'
+WHEN SGRCHRT_CREA_CODE IN ('PR', 'CMA') THEN 'Military Leave'
+WHEN SGRCHRT_CREA_CODE IN ('02','PEAC') THEN 'Foreign Aid Service'
+WHEN SGRCHRT_CREA_CODE IN ('FD') THEN 'Religious Leave'
+ELSE 'Others' END exclusionReason,
+  TO_CHAR(SGRCHRT_CREA_CODE) exclusionReasonRaw,
+   'fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4' as tenantId,
+    	'230' AS groupEntityExecutionId,
+	'65354417-dff9-40cf-ad8d-e7eb5c0b77ad' as userId,
+	'processed-data/fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4/11/2019-12-16 15:51:51' AS dataPath
+FROM SATURN.SGRCHRT
+LEFT JOIN SATURN.STVCREA on SGRCHRT_CREA_CODE = STVCREA_CODE
+WHERE SGRCHRT_ACTIVE_IND = 'Y'
+
+UNION
+
+SELECT
+  SHRTTRM_PIDM personId,
+  TO_CHAR(CAST(SHRTTRM_ACTIVITY_DATE AS TIMESTAMP WITH TIME ZONE), 'MM/DD/YYYY HH24:MI:SS') AS recordActivityDate,
+  SHRTTRM_TERM_CODE termCodeEffective,
+  CASE
+WHEN SHRTTRM_WRSN_CODE IN ('04','08')THEN 'Died'
+WHEN SHRTTRM_WRSN_CODE IN ('MED') THEN 'Medical Leave'
+WHEN SHRTTRM_WRSN_CODE IN ('PR', 'CMA') THEN 'Military Leave'
+WHEN SHRTTRM_WRSN_CODE IN ('02','PEAC') THEN 'Foreign Aid Service'
+WHEN SHRTTRM_WRSN_CODE IN ('FD') THEN 'Religious Leave'
+ELSE 'Others' END exclusionReason,
+  TO_CHAR(SHRTTRM_WRSN_CODE)  exclusionReasonRaw,
+  'fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4' as tenantId,
+    	'230' AS groupEntityExecutionId,
+	'65354417-dff9-40cf-ad8d-e7eb5c0b77ad' as userId,
+	'processed-data/fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4/11/2019-12-16 15:51:51' AS dataPath
+FROM SATURN.SHRTTRM
+INNER JOIN SATURN.STVWRSN ON SHRTTRM_WRSN_CODE = STVWRSN_CODE

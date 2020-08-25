@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."student_raw_data";

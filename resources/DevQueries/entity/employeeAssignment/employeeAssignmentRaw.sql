@@ -1,0 +1,1 @@
+Select * from (SELECT * FROM "new-ingestion-database"."employeeassignment_raw_data")where fte != 0.167

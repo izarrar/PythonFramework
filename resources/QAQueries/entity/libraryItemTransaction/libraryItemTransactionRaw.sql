@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."libraryitemtransaction_raw_qa"

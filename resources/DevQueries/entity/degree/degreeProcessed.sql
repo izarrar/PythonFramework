@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."degree_processed_data"

@@ -1,0 +1,11 @@
+INFO     Comparison:comparison_helper.py:124 Column count verification
+INFO     Comparison:comparison_helper.py:125 --------------------------
+INFO     Comparison:comparison_helper.py:128 Column count of DEV Processed File: 10
+INFO     Comparison:comparison_helper.py:129 Column count of QA Processed File: 10
+INFO     Comparison:comparison_helper.py:130 Column count of both DEV Processed & QA Processed files is equal!!
+INFO     Comparison:comparison_helper.py:138  
+INFO     Comparison:comparison_helper.py:140 Row count verification
+INFO     Comparison:comparison_helper.py:141 -----------------------
+INFO     Comparison:comparison_helper.py:144 Row count DEV Processed File: 1434
+INFO     Comparison:comparison_helper.py:145 Row count QA Processed File: 1434
+INFO     Comparison:comparison_helper.py:146 Row count of both DEV Processed & QA Processed files is equal!

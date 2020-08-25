@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."fiscalyear_processed_dev"

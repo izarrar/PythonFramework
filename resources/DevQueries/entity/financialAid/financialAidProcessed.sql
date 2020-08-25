@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."financialaid_processed_data"

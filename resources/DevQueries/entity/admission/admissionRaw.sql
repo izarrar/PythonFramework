@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."admission_raw_data";

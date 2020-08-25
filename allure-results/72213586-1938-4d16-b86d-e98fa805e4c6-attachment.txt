@@ -1,0 +1,8 @@
+  2020-01-02 19:06:37,527 - Comparison - Additional column verification DEV Processed File
+  2020-01-02 19:06:37,528 - Comparison - -----------------------------------------------------
+  2020-01-02 19:06:37,528 - Comparison - rowguid additional column exist in  DEV Processed file
+  2020-01-02 19:06:37,528 - Comparison - datapath additional column exist in  DEV Processed file
+  2020-01-02 19:06:37,528 - Comparison - userid additional column exist in  DEV Processed file
+  2020-01-02 19:06:37,528 - Comparison - groupentityexecutionid additional column exist in  DEV Processed file
+  2020-01-02 19:06:37,529 - Comparison - recordinsertedtimestamp additional column exist in  DEV Processed file
+  2020-01-02 19:06:37,529 - Comparison - tenantid additional column exist in  DEV Processed file

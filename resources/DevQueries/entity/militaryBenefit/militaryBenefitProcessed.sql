@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."militarybenefit_processed_data"

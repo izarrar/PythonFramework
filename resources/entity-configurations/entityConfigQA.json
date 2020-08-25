@@ -1,0 +1,262 @@
+{
+    "entity":{
+	 "PERSON": {
+          "data_model_entity_id": 1,
+          "entity_type" : "Banner",
+          "entity_name": "person",
+          "raw": "resources/QAQueries/entity/person/personRaw.sql",
+          "processed": "resources/QAQueries/entity/person/personProcessed.sql"
+        },
+		"STUDENT": {
+          "data_model_entity_id": 2,
+          "entity_type" : "Banner",
+          "entity_name": "student",
+          "raw": "resources/QAQueries/entity/student/studentRaw.sql",
+          "processed": "resources/QAQueries/entity/student/studentProcessed.sql"
+        },
+		 "REGISTRATION": {
+          "data_model_entity_id": 3,
+          "entity_type" : "Banner",
+          "entity_name": "registration",
+          "raw": "resources/QAQueries/entity/registration/registrationRaw.sql",
+          "processed": "resources/QAQueries/entity/registration/registrationProcessed.sql"
+        },
+		 "COURSE": {
+          "data_model_entity_id": 4,
+          "entity_type" : "Banner",
+          "entity_name": "course",
+          "raw": "resources/QAQueries/entity/course/courseRaw.sql",
+          "processed": "resources/QAQueries/entity/course/courseProcessed.sql"
+        },
+		    "ACADEMICTERM": {
+          "data_model_entity_id": 5,
+          "entity_type" : "Banner",
+          "entity_name": "academicTerm",
+          "raw": "resources/QAQueries/entity/academicTerm/academicTermRaw.sql",
+          "processed": "resources/QAQueries/entity/academicTerm/academicTermProcessed.sql"
+        },
+      
+       "CAMPUS": {
+          "data_model_entity_id": 6,
+          "entity_type" : "Banner",
+          "entity_name": "campus",
+          "raw": "/resources/QAQueries/entity/campus/campusRaw.sql",
+          "processed": "/resources/QAQueries/entity/campus/campusProcessed.sql"
+
+        },
+		 "ACADEMICTRACK": {
+          "data_model_entity_id": 7,
+          "entity_type" : "Banner",
+          "entity_name": "academicTrack",
+          "raw": "resources/QAQueries/entity/academicTrack/academicTrackRaw.sql",
+          "processed": "resources/QAQueries/entity/academicTrack/academicTrackProcessed.sql"
+        },
+		"DEGREE": {
+          "data_model_entity_id": 8,
+          "entity_type" : "Banner",
+          "entity_name": "degree",
+          "raw": "resources/QAQueries/entity/degree/degreeRaw.sql",
+          "processed": "resources/QAQueries/entity/degree/degreeProcessed.sql"
+        },
+		  "AWARD": {
+          "data_model_entity_id": 9,
+          "entity_type" : "Banner",
+          "entity_name": "award",
+          "raw": "resources/QAQueries/entity/award/awardRaw.sql",
+          "processed": "resources/QAQueries/entity/award/awardProcessed.sql"
+        },
+		"FINANCIALAID": {
+          "data_model_entity_id": 10,
+          "entity_type" : "Banner",
+          "entity_name": "financialAid",
+          "raw": "resources/QAQueries/entity/financialAid/financialAidRaw.sql",
+          "processed": "resources/QAQueries/entity/financialAid/financialAidProcessed.sql"
+        },
+		"COHORTEXCLUSION": {
+          "data_model_entity_id": 11,
+          "entity_type" : "Banner",
+          "entity_name": "cohortExclusion",
+          "raw": "resources/QAQueries/entity/cohortExclusion/cohortExclusionRaw.sql",
+          "processed": "resources/QAQueries/entity/cohortExclusion/cohortExclusionProcessed.sql"
+        },
+		"TRANSFER": {
+          "data_model_entity_id": 12,
+          "entity_type" : "csv",
+          "entity_name": "transfer",
+          "raw": "resources/QAQueries/entity/transfer/transferRaw.sql",
+          "processed": "resources/QAQueries/entity/transfer/transferProcessed.sql"
+        },
+		"ADMISSION": {
+          "data_model_entity_id": 13,
+          "entity_type" : "Banner",
+          "entity_name": "admission",
+          "raw": "resources/QAQueries/entity/admission/admissionRaw.sql",
+          "processed": "resources/QAQueries/entity/admission/admissionProcessed.sql"
+        },
+		 "COURSESCHEDULE": {
+          "data_model_entity_id": 14,
+          "entity_type" : "Banner",
+          "entity_name": "courseSchedule",
+          "raw": "resources/QAQueries/entity/courseSchedule/courseScheduleRaw.sql",
+          "processed": "resources/QAQueries/entity/courseSchedule/courseScheduleProcessed.sql"
+        },
+		 "EMPLOYEE": {
+          "data_model_entity_id": 15,
+          "entity_type" : "Banner",
+          "entity_name": "employee",
+          "raw": "resources/QAQueries/entity/employee/employeeRaw.sql",
+          "processed": "resources/QAQueries/entity/employee/employeeProcessed.sql"
+        },
+		"EMPLOYEEASSIGNMENT": {
+          "data_model_entity_id": 16,
+          "entity_type" : "Banner",
+          "entity_name": "employeeAssignment",
+          "raw": "/resources/QAQueries/entity/employeeAssignment/employeeAssignmentRaw.sql",
+          "processed": "/resources/QAQueries/entity/employeeAssignment/employeeAssignmentProcessed.sql"
+        },
+		"EMPLOYEEPOSITION": {
+          "data_model_entity_id": 17,
+          "entity_type" : "Banner",
+          "entity_name": "employeePosition",
+          "raw": "resources/QAQueries/entity/employeePosition/employeePositionRaw.sql",
+          "processed": "resources/QAQueries/entity/employeePosition/employeePositionProcessed.sql"
+        },
+		  "FACULTY": {
+          "data_model_entity_id": 18,
+          "entity_type" : "Banner",
+          "entity_name": "faculty",
+          "raw": "/resources/QAQueries/entity/faculty/facultyRaw.sql",
+          "processed": "/resources/QAQueries/entity/faculty/facultyProcessed.sql"
+        },
+		"INSTRUCTIONALASSIGNMENT": {
+          "data_model_entity_id": 19,
+          "entity_type" : "Banner",
+          "entity_name": "instructionalAssignment",
+          "raw": "/resources/QAQueries/entity/instructionalAssignment/instructionalAssignmentRaw.sql",
+          "processed": "/resources/QAQueries/entity/instructionalAssignment/instructionalAssignmentProcessed.sql"
+        },
+		 "MAJOR": {
+          "data_model_entity_id": 20,
+          "entity_type" : "Banner",
+          "entity_name": "major",
+          "raw": "resources/QAQueries/entity/major/majorRaw.sql",
+          "processed": "resources/QAQueries/entity/major/majorProcessed.sql"
+        },
+		   "MILITARYBENEFIT": {
+          "data_model_entity_id": 21,
+          "entity_type" : "Banner",
+          "entity_name": "militaryBenefit",
+          "raw": "/resources/QAQueries/entity/militaryBenefit/militaryBenefitRaw.sql",
+          "processed": "/resources/QAQueries/entity/militaryBenefit/militaryBenefitProcessed.sql"
+
+        },
+		"TESTSCORE": {
+          "data_model_entity_id": 22,
+          "entity_type" : "Banner",
+          "entity_name": "testScore",
+          "raw": "resources/QAQueries/entity/testScore/testScoreRaw.sql",
+          "processed": "resources/QAQueries/entity/testScore/testScoreProcessed.sql"
+        },
+     
+      "CHARTOFACCOUNTS": {
+          "data_model_entity_id": 23,
+          "entity_type" : "Banner",
+          "entity_name": "chartOfAccounts",
+          "raw": "/resources/QAQueries/entity/chartOfAccounts/chartOfAccountsRaw.sql",
+          "processed": "/resources/QAQueries/entity/chartOfAccounts/chartOfAccountsProcessed.sql"
+        },
+		"FISCALYEAR": {
+          "data_model_entity_id": 24,
+          "entity_type" : "Banner",
+          "entity_name": "fiscalYear",
+          "raw": "resources/QAQueries/entity/fiscalYear/fiscalYearRaw.sql",
+          "processed": "resources/QAQueries/entity/fiscalYear/fiscalYearProcessed.sql"
+        },
+      
+     
+		"GENERALLEDGERREPORTING": {
+          "data_model_entity_id": 25,
+          "entity_type" : "Banner",
+          "entity_name": "generalLedgerReporting",
+          "raw": "resources/QAQueries/entity/generalLedgerReporting/generalLedgerReportingRaw.sql",
+          "processed": "resources/QAQueries/entity/generalLedgerReporting/generalLedgerReportingProcessed.sql"
+        },
+		"INTERLIBRARYLOANSTATISTICS": {
+          "data_model_entity_id": 26,
+          "entity_type" : "csv",
+          "entity_name": "interLibraryLoanStatistics",
+          "raw": "resources/QAQueries/entity/interLibraryLoanStatistics/interLibraryLoanStatisticsRaw.sql",
+          "processed": "resources/QAQueries/entity/interLibraryLoanStatistics/interLibraryLoanStatisticsProcessed.sql"
+        },
+		"LIBRARYBRANCH": {
+          "data_model_entity_id": 27,
+          "entity_type" : "csv",
+          "entity_name": "libraryBranch",
+          "raw": "resources/QAQueries/entity/libraryBranch/libraryBranchRaw.sql",
+          "processed": "resources/QAQueries/entity/libraryBranch/libraryBranchProcessed.sql"
+        },
+		"LIBRARYCIRCULATIONSTATISTIC": {
+          "data_model_entity_id": 28,
+          "entity_type" : "csv",
+          "entity_name": "libraryCirculationStatistic",
+          "raw": "resources/QAQueries/entity/libraryCirculationStatistic/libraryCirculationStatisticRaw.sql",
+          "processed": "resources/QAQueries/entity/libraryCirculationStatistic/libraryCirculationStatisticProcessed.sql"
+        },
+		"LIBRARYCOLLECTIONSTATISTIC": {
+          "data_model_entity_id": 29,
+          "entity_type" : "csv",
+          "entity_name": "libraryCollectionStatistic",
+          "raw": "resources/QAQueries/entity/libraryCollectionStatistic/libraryCollectionStatisticRaw.sql",
+          "processed": "resources/QAQueries/entity/libraryCollectionStatistic/libraryCollectionStatisticProcessed.sql"
+        },
+     
+      
+      "LIBRARYEXPENSES": {
+          "data_model_entity_id": 30,
+          "entity_type" : "Banner",
+          "entity_name": "libraryExpenses",
+          "raw": "resources/QAQueries/entity/libraryExpenses/libraryExpensesRaw.sql",
+          "processed": "resources/QAQueries/entity/libraryExpenses/libraryExpensesProcessed.sql"
+        },
+		"LIBRARYINVENTORY": {
+          "data_model_entity_id": 31,
+          "entity_type" : "csv",
+          "entity_name": "libraryInventory",
+          "raw": "resources/QAQueries/entity/libraryInventory/libraryInventoryRaw.sql",
+          "processed": "resources/QAQueries/entity/libraryInventory/libraryInventoryProcessed.sql"
+        },
+      "LIBRARYITEMTRANSACTION": {
+          "data_model_entity_id": 32,
+          "entity_type" : "csv",
+          "entity_name": "libraryItemTransaction",
+          "raw": "resources/QAQueries/entity/libraryItemTransaction/libraryItemTransactionRaw.sql",
+          "processed": "resources/QAQueries/entity/libraryItemTransaction/libraryItemTransactionProcessed.sql"
+        },
+      
+		 "OPERATINGLEDGERREPORTING": {
+          "data_model_entity_id": 33,
+          "entity_type" : "Banner",
+          "entity_name": "operatingLedgerReporting",
+          "raw": "resources/QAQueries/entity/operatingLedgerReporting/operatingLedgerReportingRaw.sql",
+          "processed": "resources/QAQueries/entity/operatingLedgerReporting/operatingLedgerReportingProcessed.sql"
+        },
+      
+      "INSTITCHARUNDERGRAD": {
+          "data_model_entity_id": 34,
+          "entity_type" : "csv",
+          "entity_name": "institCharUndergradGrad",
+          "raw": "resources/QAQueries/entity/institCharUndergrad/institCharUndergradRaw.sql",
+          "processed": "resources/QAQueries/entity/institCharUndergrad/institCharUndergradProcessed.sql"
+        },
+		 "INSTITCHARDOCTORATE": {
+          "data_model_entity_id": 35,
+          "entity_type" : "csv",
+          "entity_name": "institCharDoctorate",
+          "raw": "/resources/QAQueries/entity/institCharDoctorate/institCharDoctorateRaw.sql",
+          "processed": "/resources/QAQueries/entity/institCharDoctorate/institCharDoctorateProcessed.sql"
+        }
+      
+
+    }
+  }
+  

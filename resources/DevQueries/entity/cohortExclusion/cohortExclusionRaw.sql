@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."cohortexclusion_raw_data";

@@ -1,0 +1,11 @@
+  2020-01-02 19:06:41,653 - Comparison - Column count verification
+  2020-01-02 19:06:41,653 - Comparison - --------------------------
+  2020-01-02 19:06:41,653 - Comparison - Column count of DEV Processed File: 10
+  2020-01-02 19:06:41,653 - Comparison - Column count of QA Processed File: 10
+  2020-01-02 19:06:41,653 - Comparison - Column count of both DEV Processed & QA Processed files is equal!!
+  2020-01-02 19:06:41,654 - Comparison -  
+  2020-01-02 19:06:41,654 - Comparison - Row count verification
+  2020-01-02 19:06:41,654 - Comparison - -----------------------
+  2020-01-02 19:06:41,654 - Comparison - Row count DEV Processed File: 1434
+  2020-01-02 19:06:41,654 - Comparison - Row count QA Processed File: 1434
+  2020-01-02 19:06:41,654 - Comparison - Row count of both DEV Processed & QA Processed files is equal!

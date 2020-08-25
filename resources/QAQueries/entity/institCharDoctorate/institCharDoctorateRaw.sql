@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."institchardoctorate_raw_data_qa"

@@ -1,0 +1,5 @@
+INFO     Comparison:comparison_helper.py:220 RowGuID verification on DEV Processed File
+INFO     Comparison:comparison_helper.py:221 -----------------------------------------------------
+INFO     Comparison:comparison_helper.py:231 Count of row gui id & count of rows in data frame is equal! 
+ count : 1434
+INFO     Comparison:comparison_helper.py:233 There are no duplicate values in row gui id column

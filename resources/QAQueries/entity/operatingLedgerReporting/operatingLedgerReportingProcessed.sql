@@ -1,0 +1,54 @@
+select FGBOPAL.FGBOPAL_FSYR_CODE as fiscalYear2Char,
+  '14' as fiscalPeriodCode,
+  FGBOPAL.FGBOPAL_COAS_CODE as chartOfAccountsID,
+  FGBOPAL.FGBOPAL_FUND_CODE || '-' || FGBOPAL.FGBOPAL_ORGN_CODE || '-' || FGBOPAL.FGBOPAL_ACCT_CODE || '-' || FGBOPAL.FGBOPAL_PROG_CODE || '-' || FGBOPAL.FGBOPAL_ACTV_CODE || '-' || FGBOPAL.FGBOPAL_LOCN_CODE as accountingString,
+  FGBOPAL.FGBOPAL_ACTIVITY_DATE as recordActivityDate,
+  CASE WHEN (case when FGBOPAL.FGBOPAL_ACCT_CODE IN ('7651', '7652', '7653', '7701', '7940', '7170', '7171', '7172') then 'Revenue Discount'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED IN ('50') then 'Revenue'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED in ('60', '70') then 'Expense'
+            end) = 'Revenue Discount' THEN 'Revenue Discount'
+		WHEN (case when FGBOPAL.FGBOPAL_ACCT_CODE IN ('7651', '7652', '7653', '7701', '7940', '7170', '7171', '7172') then 'Revenue Discount'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED IN ('50') then 'Revenue'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED in ('60', '70') then 'Expense'
+            end) = 'Revenue' THEN 'Revenue'
+		WHEN (case when FGBOPAL.FGBOPAL_ACCT_CODE IN ('7651', '7652', '7653', '7701', '7940', '7170', '7171', '7172') then 'Revenue Discount'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED IN ('50') then 'Revenue'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED in ('60', '70') then 'Expense'
+            end) = 'Expense' THEN 'Expense'
+		ELSE '' END	accountType,
+  nvl((select sum(FGBOPAL.FGBOPAL_14_YTD_ACTV)
+  from FIMSMGR.FGBOPAL FGBOPAL1
+  where ( FGBOPAL1.FGBOPAL_COAS_CODE = FGBOPAL.FGBOPAL_COAS_CODE
+    and FGBOPAL1.FGBOPAL_ACCT_CODE = FGBOPAL.FGBOPAL_ACCT_CODE
+    and FGBOPAL1.FGBOPAL_FUND_CODE = FGBOPAL.FGBOPAL_FUND_CODE
+    and FGBOPAL1.FGBOPAL_PROG_CODE = FGBOPAL.FGBOPAL_PROG_CODE
+    and FGBOPAL1.FGBOPAL_ORGN_CODE = FGBOPAL.FGBOPAL_ORGN_CODE
+    and FGBOPAL1.FGBOPAL_FSYR_CODE = FGBOPAL.FGBOPAL_FSYR_CODE-1)), 0) as beginBalance,
+  FGBOPAL.FGBOPAL_14_YTD_ACTV as endBalance,
+  case when FGBOPAL.FGBOPAL_ACCT_CODE IN ('7651', '7652', '7653', '7701', '7940', '7170', '7171', '7172','Revenue Discount') then 'Revenue Discount'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED IN ('50', 'Revenue') then 'Revenue'
+            when FTVATYP.FTVATYP_ATYP_CODE_PRED in ('60', '70', 'Expense') then 'Expense'
+            end as accountTypeRaw,
+  'fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4' as tenantId,
+    '313' AS groupEntityExecutionId,
+'65354417-dff9-40cf-ad8d-e7eb5c0b77ad' as userId,
+'processed-data/fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4/33/2019-12-18 13:20:06' AS dataPath
+from ( ( (FIMSMGR.FGBOPAL FGBOPAL inner join FIMSMGR.FTVACCT FTVACCT on (FGBOPAL.FGBOPAL_COAS_CODE = FTVACCT.FTVACCT_COAS_CODE) and (FGBOPAL.FGBOPAL_ACCT_CODE = FTVACCT.FTVACCT_ACCT_CODE) ) inner join FIMSMGR.FTVATYP FTVATYP on (FTVACCT.FTVACCT_COAS_CODE = FTVATYP.FTVATYP_COAS_CODE) and (FTVACCT.FTVACCT_ATYP_CODE = FTVATYP.FTVATYP_ATYP_CODE) ) inner join FIMSMGR.FTVFUND FTVFUND on (FGBOPAL.FGBOPAL_COAS_CODE = FTVFUND.FTVFUND_COAS_CODE) and (FGBOPAL.FGBOPAL_FUND_CODE = FTVFUND.FTVFUND_FUND_CODE) ) inner join FIMSMGR.FTVFTYP FTVFTYP on (FTVFUND.FTVFUND_COAS_CODE = FTVFTYP.FTVFTYP_COAS_CODE) and (FTVFUND.FTVFUND_FTYP_CODE = FTVFTYP.FTVFTYP_FTYP_CODE)
+where --FGBOPAL.FGBOPAL_FSYR_CODE = '02'
+       --and FGBOPAL.FGBOPAL_COAS_CODE = 'B'
+       --and
+       FTVACCT.FTVACCT_DATA_ENTRY_IND = 'Y'
+  and FTVACCT.FTVACCT_STATUS_IND = 'A'
+  and FTVACCT.FTVACCT_NCHG_DATE >sysdate
+  and FTVATYP.FTVATYP_STATUS_IND = 'A'
+  and FTVATYP.FTVATYP_NCHG_DATE >sysdate
+  and FTVFUND.FTVFUND_STATUS_IND = 'A'
+  and FTVFUND.FTVFUND_DATA_ENTRY_IND = 'Y'
+  and FTVFUND.FTVFUND_NCHG_DATE > sysdate
+  and FTVFTYP.FTVFTYP_STATUS_IND = 'A'
+  and FTVFTYP.FTVFTYP_NCHG_DATE >sysdate
+  and FTVATYP.FTVATYP_ATYP_CODE_PRED in ('50', '60', '70')
+order by 3,
+          1,
+          2,
+          4

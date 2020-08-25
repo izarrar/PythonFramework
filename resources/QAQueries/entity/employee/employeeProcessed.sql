@@ -1,0 +1,42 @@
+select
+  PEBEMPL.PEBEMPL_PIDM personId,
+  PEBEMPL.PEBEMPL_ACTIVITY_DATE recordActivityDate,
+  PEBEMPL.PEBEMPL_CURRENT_HIRE_DATE hireDate,
+  PEBEMPL.PEBEMPL_TERM_DATE terminationDate,
+  CASE
+    WHEN PEBEMPL.PEBEMPL_INTERNAL_FT_PT_IND = 'P' THEN 'Part Time'
+    WHEN PEBEMPL.PEBEMPL_INTERNAL_FT_PT_IND = 'O' THEN 'Other'
+    WHEN PEBEMPL.PEBEMPL_INTERNAL_FT_PT_IND = 'F' THEN 'Full Time'
+    ELSE '' END  fullOrPartTimeStatus,
+
+  CASE
+    WHEN PEBEMPL.PEBEMPL_IPEDS_PRIMARY_FUNCTION = 'IRP' THEN 'Instruction - Credit'
+    WHEN PEBEMPL.PEBEMPL_IPEDS_PRIMARY_FUNCTION = 'GAT' THEN 'Graduate Assistant - Teaching'
+    WHEN PEBEMPL.PEBEMPL_IPEDS_PRIMARY_FUNCTION = 'N' THEN 'None'
+    ELSE '' END IPEDSPrimaryFunction,
+
+  case when PEBEMPL.PEBEMPL_IPEDS_PRIMARY_FUNCTION = 'GAT' then 'True'
+            when PEBEMPL.PEBEMPL_ECLS_CODE IN ('GR', '19') then 'True' else 'False' end isGraduateAssistant,
+  case when PEBEMPL.PEBEMPL_IPEDS_MED_DENTAL_IND = 'Y' then 'True' else 'False' end isIPEDSMedicalOrDental,
+  CASE
+    WHEN PEBEMPL.PEBEMPL_EMPL_STATUS = 'T' THEN 'Terminated'
+    WHEN PEBEMPL.PEBEMPL_EMPL_STATUS = 'A' THEN 'Active'
+    WHEN PEBEMPL.PEBEMPL_EMPL_STATUS = 'B' THEN 'On Leave'
+    ELSE '' END employeeStatus,
+
+  PEBEMPL.PEBEMPL_ECLS_CODE employeeClass,
+  (select PTRECLS.PTRECLS_SHORT_DESC
+  from PAYROLL.PTRECLS PTRECLS
+  where PTRECLS.PTRECLS_CODE = PEBEMPL.PEBEMPL_ECLS_CODE) employeeClassDescription,
+  PEBEMPL.PEBEMPL_EGRP_CODE employeeGroup,
+  (select PTVEGRP.PTVEGRP_DESC
+  from PAYROLL.PTVEGRP PTVEGRP
+  where PTVEGRP.PTVEGRP_CODE = PEBEMPL.PEBEMPL_EGRP_CODE) employeeGroupDescription,
+    PEBEMPL.PEBEMPL_INTERNAL_FT_PT_IND fullOrPartTimeStatusRaw,
+    PEBEMPL.PEBEMPL_IPEDS_PRIMARY_FUNCTION IPEDSPrimaryFunctionRaw,
+    PEBEMPL.PEBEMPL_EMPL_STATUS employeeStatusRaw,
+  '37ae73e1-cbb3-4250-bfc2-54343450f1af' AS tenantId,
+'144' AS groupEntityExecutionId,
+'0afcf47a-3421-4875-89d8-0bcbbdd548a9' AS userId,
+'processed-data/37ae73e1-cbb3-4250-bfc2-54343450f1af/20/2019-10-22 19:10:59' AS dataPath
+from PAYROLL.PEBEMPL PEBEMPL

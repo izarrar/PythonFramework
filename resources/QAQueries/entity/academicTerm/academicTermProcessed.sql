@@ -1,0 +1,47 @@
+SELECT DISTINCT
+  STVTERM.STVTERM_CODE termCode,
+  STVTERM.STVTERM_ACTIVITY_DATE recordActivityDate,
+  STVTERM.STVTERM_DESC termCodeDescription,
+  STVTERM.STVTERM_START_DATE startDate,
+  STVTERM.STVTERM_END_DATE endDate,
+  STVTERM.STVTERM_ACYR_CODE academicYear,
+  STVTERM.STVTERM_FA_PROC_YR financialAidYear,
+  SFRSTCR.SFRSTCR_PTRM_CODE partOfTermCode,
+  (SELECT STVPTRM.STVPTRM_DESC
+   FROM SATURN.STVPTRM STVPTRM
+   WHERE STVPTRM.STVPTRM_CODE = SFRSTCR.SFRSTCR_PTRM_CODE) partOfTermCodeDescription,
+   
+   CASE
+    WHEN substr(STVTERM.STVTERM_CODE, 5, 2) IN ('10', '20') then STVTERM.STVTERM_START_DATE + 15
+    WHEN substr(STVTERM.STVTERM_CODE, 5, 2) IN ('30') then STVTERM.STVTERM_START_DATE + 5
+    ELSE STVTERM.STVTERM_START_DATE + 5
+  END censusDate,
+
+  CASE WHEN (substr(STVTERM.STVTERM_CODE, 5, 2)) = '47' THEN 'Summer'
+
+       WHEN (substr(STVTERM.STVTERM_CODE, 5, 2)) = '61' THEN 'May'
+
+      WHEN (substr(STVTERM.STVTERM_CODE, 5, 2)) = '08' THEN 'Spring'
+
+	   WHEN (substr(STVTERM.STVTERM_CODE, 5, 2)) = '09' THEN 'Winter'
+
+      WHEN (substr(STVTERM.STVTERM_CODE, 5, 2)) = '04' THEN 'Fall'
+  ELSE '' END termType,
+
+  CASE
+    WHEN substr(STVTERM.STVTERM_CODE, 5, 2) IN ('10', '20') then 12
+    ELSE 6
+  END requiredFullTimeHoursUG,
+  CASE
+    WHEN substr(STVTERM.STVTERM_CODE, 5, 2) IN ('10', '20') then 12
+    ELSE 6
+  END requiredFullTimeHoursGR,
+	'True' isIPEDSReportable,
+  substr(STVTERM.STVTERM_CODE, 5, 2) termTypeRaw,
+	'fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4' as tenantId,
+    	'320' AS groupEntityExecutionId,
+	'65354417-dff9-40cf-ad8d-e7eb5c0b77ad' as userId,
+	'processed-data/fa748ab4-a958-11e9-a2a3-2a2ae2dbcce4/5/2019-12-19 07:44:55' AS dataPath
+FROM SATURN.STVTERM STVTERM
+LEFT JOIN SATURN.SFRSTCR SFRSTCR
+  ON SFRSTCR.SFRSTCR_TERM_CODE = STVTERM.STVTERM_CODE

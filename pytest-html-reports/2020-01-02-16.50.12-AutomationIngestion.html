@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <style>body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	/* do not increase min-width as some may use split screens */
+	min-width: 800px;
+	color: #999;
+}
+
+h1 {
+	font-size: 24px;
+	color: black;
+}
+
+h2 {
+	font-size: 16px;
+	color: black;
+}
+
+p {
+    color: black;
+}
+
+a {
+	color: #999;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+
+#environment td {
+	padding: 5px;
+	border: 1px solid #E6E6E6;
+}
+
+#environment tr:nth-child(odd) {
+	background-color: #f6f6f6;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed, .passed .col-result {
+	color: green;
+}
+span.skipped, span.xfailed, span.rerun, .skipped .col-result, .xfailed .col-result, .rerun .col-result {
+	color: orange;
+}
+span.error, span.failed, span.xpassed, .error .col-result, .failed .col-result, .xpassed .col-result  {
+	color: red;
+}
+
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+
+#results-table {
+	border: 1px solid #e6e6e6;
+	color: #999;
+	font-size: 12px;
+	width: 100%
+}
+
+#results-table th, #results-table td {
+	padding: 5px;
+	border: 1px solid #E6E6E6;
+	text-align: left
+}
+#results-table th {
+	font-weight: bold
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+
+.log:only-child {
+	height: inherit
+}
+.log {
+	background-color: #e6e6e6;
+	border: 1px solid #e6e6e6;
+	color: black;
+	display: block;
+	font-family: "Courier New", Courier, monospace;
+	height: 230px;
+	overflow-y: scroll;
+	padding: 5px;
+	white-space: pre-wrap
+}
+div.image {
+	border: 1px solid #e6e6e6;
+	float: right;
+	height: 240px;
+	margin-left: 5px;
+	overflow: hidden;
+	width: 320px
+}
+div.image img {
+	width: 320px
+}
+.collapsed {
+	display: none;
+}
+.expander::after {
+	content: " (show details)";
+	color: #BBB;
+	font-style: italic;
+	cursor: pointer;
+}
+.collapser::after {
+	content: " (hide details)";
+	color: #BBB;
+	font-style: italic;
+	cursor: pointer;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+	cursor: pointer;
+}
+
+.sort-icon {
+	font-size: 0px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 5px;
+	/*triangle*/
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+}
+
+.inactive .sort-icon {
+	/*finish triangle*/
+	border-top: 8px solid #E6E6E6;
+}
+
+.asc.active .sort-icon {
+	/*finish triangle*/
+	border-bottom: 8px solid #999;
+}
+
+.desc.active .sort-icon {
+	/*finish triangle*/
+	border-top: 8px solid #999;
+}
+</style></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function find_all(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sort_column(elem) {
+    toggle_sort_states(elem);
+    var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    var key;
+    if (elem.classList.contains('numeric')) {
+        key = key_num;
+    } else if (elem.classList.contains('result')) {
+        key = key_result;
+    } else {
+        key = key_alpha;
+    }
+    sort_table(elem, key(colIndex));
+}
+
+function show_all_extras() {
+    find_all('.col-result').forEach(show_extras);
+}
+
+function hide_all_extras() {
+    find_all('.col-result').forEach(hide_extras);
+}
+
+function show_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.remove("collapsed");
+    expandcollapse.classList.remove("expander");
+    expandcollapse.classList.add("collapser");
+}
+
+function hide_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.add("collapsed");
+    expandcollapse.classList.remove("collapser");
+    expandcollapse.classList.add("expander");
+}
+
+function show_filters() {
+    var filter_items = document.getElementsByClassName('filter');
+    for (var i = 0; i < filter_items.length; i++)
+        filter_items[i].hidden = false;
+}
+
+function add_collapse() {
+    // Add links for show/hide all
+    var resulttable = find('table#results-table');
+    var showhideall = document.createElement("p");
+    showhideall.innerHTML = '<a href="javascript:show_all_extras()">Show all details</a> / ' +
+                            '<a href="javascript:hide_all_extras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    find_all('.col-result').forEach(function(elem) {
+        var collapsed = get_query_parameter('collapsed') || 'Passed';
+        var extras = elem.parentNode.nextElementSibling;
+        var expandcollapse = document.createElement("span");
+        if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add("collapsed");
+            expandcollapse.classList.add("expander");
+        } else {
+            expandcollapse.classList.add("collapser");
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener("click", function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains("collapsed")) {
+                show_extras(event.currentTarget);
+            } else {
+                hide_extras(event.currentTarget);
+            }
+        });
+    })
+}
+
+function get_query_parameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () {
+    reset_sort_headers();
+
+    add_collapse();
+
+    show_filters();
+
+    sort_column(find('.initial-sort'));
+
+    find_all('.sortable').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  sort_column(elem);
+                              }, false)
+    });
+
+};
+
+function sort_table(clicked, key_func) {
+    var rows = find_all('.results-table-row');
+    var reversed = !clicked.classList.contains('asc');
+    var sorted_rows = sort(rows, key_func, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    var thead = document.getElementById("results-table-head");
+    document.getElementById('results-table').remove();
+    var parent = document.createElement("table");
+    parent.id = "results-table";
+    parent.appendChild(thead);
+    sorted_rows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName("BODY")[0].appendChild(parent);
+}
+
+function sort(items, key_func, reversed) {
+    var sort_array = items.map(function(item, i) {
+        return [key_func(item), i];
+    });
+
+    sort_array.sort(function(a, b) {
+        var key_a = a[0];
+        var key_b = b[0];
+
+        if (key_a == key_b) return 0;
+
+        if (reversed) {
+            return (key_a < key_b ? 1 : -1);
+        } else {
+            return (key_a > key_b ? 1 : -1);
+        }
+    });
+
+    return sort_array.map(function(item) {
+        var index = item[1];
+        return items[index];
+    });
+}
+
+function key_alpha(col_index) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[col_index].firstChild.data.toLowerCase();
+    };
+}
+
+function key_num(col_index) {
+    return function(elem) {
+        return parseFloat(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function key_result(col_index) {
+    return function(elem) {
+        var strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+                       'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function reset_sort_headers() {
+    find_all('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    find_all('.sortable').forEach(function(elem) {
+        var icon = document.createElement("div");
+        icon.className = "sort-icon";
+        icon.textContent = "vvv";
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove("desc", "active");
+        elem.classList.add("asc", "inactive");
+    });
+}
+
+function toggle_sort_states(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        reset_sort_headers();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function is_all_rows_hidden(value) {
+  return value.hidden == false;
+}
+
+function filter_table(elem) {
+    var outcome_att = "data-test-result";
+    var outcome = elem.getAttribute(outcome_att);
+    class_outcome = outcome + " results-table-row";
+    var outcome_rows = document.getElementsByClassName(class_outcome);
+
+    for(var i = 0; i < outcome_rows.length; i++){
+        outcome_rows[i].hidden = !elem.checked;
+    }
+
+    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
+    var all_rows_hidden = rows.length == 0 ? true : false;
+    var not_found_message = document.getElementById("not-found-message");
+    not_found_message.hidden = !all_rows_hidden;
+}
+</script>
+    <h1>2020-01-02-16.50.12-AutomationIngestion.html</h1>
+    <p>Report generated on 02-Jan-2020 at 16:50:46 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v2.0.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>JAVA_HOME</td>
+        <td>C:\Program Files\Java\jdk-13.0.1</td></tr>
+      <tr>
+        <td>Packages</td>
+        <td>{&apos;pytest&apos;: &apos;5.3.1&apos;, &apos;py&apos;: &apos;1.8.0&apos;, &apos;pluggy&apos;: &apos;0.13.1&apos;}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Windows-10-10.0.17763-SP0</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{&apos;allure-pytest&apos;: &apos;2.8.6&apos;, &apos;html&apos;: &apos;2.0.1&apos;, &apos;metadata&apos;: &apos;1.8.0&apos;}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>3.7.5</td></tr></table>
+    <h2>Summary</h2>
+    <p>6 tests ran in 32.69 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">4 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable numeric" col="duration">Duration</th>
+          <th>Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">test_suite.py::TestInjestionAutomation::test_raw_row_column_count[MILITARYBENEFIT]</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"><span class="error">E   Exception: Row count of both DEV Raw &amp; QA Raw is not equal!</span><br/><br/>During handling of the above exception, another exception occurred:<br/><span class="error">E   AssertionError: Row count of both DEV Raw &amp; QA Raw is not equal!</span><br/> ------------------------------Captured stderr call------------------------------ <br/>  2020-01-02 16:50:41,371 - Comparison - Column count verification
+  2020-01-02 16:50:41,372 - Comparison - --------------------------
+  2020-01-02 16:50:41,372 - Comparison - Column count of DEV Raw File: 5
+  2020-01-02 16:50:41,372 - Comparison - Column count of QA Raw File: 5
+  2020-01-02 16:50:41,373 - Comparison - Column count of both DEV Raw &amp; QA Raw files is equal!!
+  2020-01-02 16:50:41,373 - Comparison -  
+  2020-01-02 16:50:41,373 - Comparison - Row count verification
+  2020-01-02 16:50:41,373 - Comparison - -----------------------
+  2020-01-02 16:50:41,373 - Comparison - Row count DEV Raw File: 1434
+  2020-01-02 16:50:41,403 - Comparison - Row count of QA Raw File: 601
+  2020-01-02 16:50:41,403 - Comparison - Row count of both DEV Raw &amp; QA Raw is not equal!
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     Comparison:comparison_helper.py:124 Column count verification
+INFO     Comparison:comparison_helper.py:125 --------------------------
+INFO     Comparison:comparison_helper.py:128 Column count of DEV Raw File: 5
+INFO     Comparison:comparison_helper.py:129 Column count of QA Raw File: 5
+INFO     Comparison:comparison_helper.py:130 Column count of both DEV Raw &amp; QA Raw files is equal!!
+INFO     Comparison:comparison_helper.py:138  
+INFO     Comparison:comparison_helper.py:140 Row count verification
+INFO     Comparison:comparison_helper.py:141 -----------------------
+INFO     Comparison:comparison_helper.py:148 Row count DEV Raw File: 1434
+INFO     Comparison:comparison_helper.py:149 Row count of QA Raw File: 601
+INFO     Comparison:comparison_helper.py:150 Row count of both DEV Raw &amp; QA Raw is not equal!<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">test_suite.py::TestInjestionAutomation::test_raw_data_comparison[MILITARYBENEFIT]</td>
+          <td class="col-duration">0.21</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"><span class="error">E   Exception: DEV Raw &amp; QA Raw files are not equal!!</span><br/><br/>During handling of the above exception, another exception occurred:<br/><span class="error">E   AssertionError: DEV Raw &amp; QA Raw files are not equal!!</span><br/> ------------------------------Captured stderr call------------------------------ <br/>  2020-01-02 16:50:41,578 - Comparison - Data Comparison
+  2020-01-02 16:50:41,578 - Comparison - ----------------
+  2020-01-02 16:50:41,626 - Comparison - DEV Raw File &amp; QA Raw File are not equal
+  2020-01-02 16:50:41,626 - Comparison - 
+  2020-01-02 16:50:41,626 - Comparison - Rows with unequal values between DEV Raw File &amp; QA Raw File
+  2020-01-02 16:50:41,626 - Comparison - -----------------------------------------------------------------------
+  2020-01-02 16:50:41,630 - Comparison - 
+  2020-01-02 16:50:41,633 - Comparison -      personid (DEV Raw)  personid (QA Raw)
+41                  625              889.0
+337                2790            32567.0
+176                1454             3139.0
+186                1483             3438.0
+137                 917             2781.0
+248                2059            31090.0
+591               30824            41105.0
+86                  881             1572.0
+571               30674            39758.0
+190                1489             3571.0
+  2020-01-02 16:50:41,653 - Comparison - 
+  2020-01-02 16:50:41,656 - Comparison -     recordactivitydate (DEV Raw) recordactivitydate (QA Raw)
+460                     07/06/05                    10/06/08
+96                      08/05/99                    05/07/03
+27                      06/27/01                    04/08/98
+91                      08/04/99                    03/25/03
+404                     03/22/06                    01/05/08
+451                     12/06/04                    10/03/08
+161                     09/22/00                    09/08/04
+178                     02/14/02                    10/14/04
+128                     08/05/99                    06/08/04
+4                       10/05/95                    10/06/95
+  2020-01-02 16:50:41,690 - Comparison - 
+  2020-01-02 16:50:41,694 - Comparison -     benefittyperaw (DEV Raw) benefittyperaw (QA Raw)
+143                     FFPG                    FSEG
+70                      FFPG                    FSEG
+97                      FFPG                    FSEG
+184                     FFPG                    FSEG
+404                     FFPG                    FSEG
+187                     FFPG                    FSEG
+595                     FFPG                     VMS
+499                     FSEG                    NAVP
+458                     FFPG                    FSEG
+79                      FFPG                    FSEG
+  2020-01-02 16:50:41,713 - Comparison - 
+  2020-01-02 16:50:41,716 - Comparison -      termcode (DEV Raw)  termcode (QA Raw)
+502              200610           201220.0
+453              200610           200910.0
+521              200710           201110.0
+400              200820           200810.0
+256              200410           200710.0
+59               199810           199910.0
+129              199910           200410.0
+446              200510           200910.0
+263              200810           200710.0
+422              200510           200910.0
+  2020-01-02 16:50:41,740 - Comparison - 
+  2020-01-02 16:50:41,745 - Comparison -      benefitamount (DEV Raw)  benefitamount (QA Raw)
+377                    250.0                  334.00
+562                   1499.0                 2000.00
+47                    1175.0                  600.00
+539                    225.0                 -187.00
+389                   2000.0                 -312.00
+583                   1500.0                  166.00
+25                     500.0                  600.00
+470                    500.0                  -79.75
+160                   1288.0                  750.00
+386                   1680.0                  450.00
+  2020-01-02 16:50:41,764 - Utility - Exporting data to csv file...
+  2020-01-02 16:50:41,790 - Utility - Data has been exported to csv file successfully!
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     Comparison:comparison_helper.py:166 Data Comparison
+INFO     Comparison:comparison_helper.py:167 ----------------
+INFO     Comparison:comparison_helper.py:173 DEV Raw File &amp; QA Raw File are not equal
+INFO     Comparison:comparison_helper.py:174 
+INFO     Comparison:comparison_helper.py:175 Rows with unequal values between DEV Raw File &amp; QA Raw File
+INFO     Comparison:comparison_helper.py:176 -----------------------------------------------------------------------
+INFO     Comparison:comparison_helper.py:186 
+INFO     Comparison:comparison_helper.py:187      personid (DEV Raw)  personid (QA Raw)
+41                  625              889.0
+337                2790            32567.0
+176                1454             3139.0
+186                1483             3438.0
+137                 917             2781.0
+248                2059            31090.0
+591               30824            41105.0
+86                  881             1572.0
+571               30674            39758.0
+190                1489             3571.0
+INFO     Comparison:comparison_helper.py:186 
+INFO     Comparison:comparison_helper.py:187     recordactivitydate (DEV Raw) recordactivitydate (QA Raw)
+460                     07/06/05                    10/06/08
+96                      08/05/99                    05/07/03
+27                      06/27/01                    04/08/98
+91                      08/04/99                    03/25/03
+404                     03/22/06                    01/05/08
+451                     12/06/04                    10/03/08
+161                     09/22/00                    09/08/04
+178                     02/14/02                    10/14/04
+128                     08/05/99                    06/08/04
+4                       10/05/95                    10/06/95
+INFO     Comparison:comparison_helper.py:186 
+INFO     Comparison:comparison_helper.py:187     benefittyperaw (DEV Raw) benefittyperaw (QA Raw)
+143                     FFPG                    FSEG
+70                      FFPG                    FSEG
+97                      FFPG                    FSEG
+184                     FFPG                    FSEG
+404                     FFPG                    FSEG
+187                     FFPG                    FSEG
+595                     FFPG                     VMS
+499                     FSEG                    NAVP
+458                     FFPG                    FSEG
+79                      FFPG                    FSEG
+INFO     Comparison:comparison_helper.py:186 
+INFO     Comparison:comparison_helper.py:187      termcode (DEV Raw)  termcode (QA Raw)
+502              200610           201220.0
+453              200610           200910.0
+521              200710           201110.0
+400              200820           200810.0
+256              200410           200710.0
+59               199810           199910.0
+129              199910           200410.0
+446              200510           200910.0
+263              200810           200710.0
+422              200510           200910.0
+INFO     Comparison:comparison_helper.py:186 
+INFO     Comparison:comparison_helper.py:187      benefitamount (DEV Raw)  benefitamount (QA Raw)
+377                    250.0                  334.00
+562                   1499.0                 2000.00
+47                    1175.0                  600.00
+539                    225.0                 -187.00
+389                   2000.0                 -312.00
+583                   1500.0                  166.00
+25                     500.0                  600.00
+470                    500.0                  -79.75
+160                   1288.0                  750.00
+386                   1680.0                  450.00
+INFO     Utility:utility_helper.py:65 Exporting data to csv file...
+INFO     Utility:utility_helper.py:67 Data has been exported to csv file successfully!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_suite.py::TestInjestionAutomation::test_dev_processed_additional_column_count[MILITARYBENEFIT]</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stderr call------------------------------ <br/>  2020-01-02 16:50:41,821 - Comparison - Additional column verification DEV Processed File
+  2020-01-02 16:50:41,821 - Comparison - -----------------------------------------------------
+  2020-01-02 16:50:41,821 - Comparison - rowguid additional column exist in  DEV Processed file
+  2020-01-02 16:50:41,821 - Comparison - datapath additional column exist in  DEV Processed file
+  2020-01-02 16:50:41,821 - Comparison - userid additional column exist in  DEV Processed file
+  2020-01-02 16:50:41,822 - Comparison - groupentityexecutionid additional column exist in  DEV Processed file
+  2020-01-02 16:50:41,822 - Comparison - recordinsertedtimestamp additional column exist in  DEV Processed file
+  2020-01-02 16:50:41,822 - Comparison - tenantid additional column exist in  DEV Processed file
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     Comparison:comparison_helper.py:245 Additional column verification DEV Processed File
+INFO     Comparison:comparison_helper.py:246 -----------------------------------------------------
+INFO     Comparison:comparison_helper.py:257 rowguid additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:257 datapath additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:257 userid additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:257 groupentityexecutionid additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:257 recordinsertedtimestamp additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:257 tenantid additional column exist in  DEV Processed file<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_suite.py::TestInjestionAutomation::test_dev_processed_row_gui_id[MILITARYBENEFIT]</td>
+          <td class="col-duration">4.01</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stderr call------------------------------ <br/>  2020-01-02 16:50:45,830 - Comparison - RowGuID verification on DEV Processed File
+  2020-01-02 16:50:45,830 - Comparison - -----------------------------------------------------
+  2020-01-02 16:50:45,837 - Comparison - Count of row gui id &amp; count of rows in data frame is equal! 
+ count : 1434
+  2020-01-02 16:50:45,837 - Comparison - There are no duplicate values in row gui id column
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     Comparison:comparison_helper.py:213 RowGuID verification on DEV Processed File
+INFO     Comparison:comparison_helper.py:214 -----------------------------------------------------
+INFO     Comparison:comparison_helper.py:224 Count of row gui id &amp; count of rows in data frame is equal! 
+ count : 1434
+INFO     Comparison:comparison_helper.py:226 There are no duplicate values in row gui id column<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_suite.py::TestInjestionAutomation::test_processed_row_column_count[MILITARYBENEFIT]</td>
+          <td class="col-duration">0.08</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stderr call------------------------------ <br/>  2020-01-02 16:50:45,929 - Comparison - Column count verification
+  2020-01-02 16:50:45,929 - Comparison - --------------------------
+  2020-01-02 16:50:45,929 - Comparison - Column count of DEV Processed File: 10
+  2020-01-02 16:50:45,929 - Comparison - Column count of QA Processed File: 10
+  2020-01-02 16:50:45,929 - Comparison - Column count of both DEV Processed &amp; QA Processed files is equal!!
+  2020-01-02 16:50:45,930 - Comparison -  
+  2020-01-02 16:50:45,930 - Comparison - Row count verification
+  2020-01-02 16:50:45,930 - Comparison - -----------------------
+  2020-01-02 16:50:45,930 - Comparison - Row count DEV Processed File: 1434
+  2020-01-02 16:50:45,930 - Comparison - Row count QA Processed File: 1434
+  2020-01-02 16:50:45,930 - Comparison - Row count of both DEV Processed &amp; QA Processed files is equal!
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     Comparison:comparison_helper.py:124 Column count verification
+INFO     Comparison:comparison_helper.py:125 --------------------------
+INFO     Comparison:comparison_helper.py:128 Column count of DEV Processed File: 10
+INFO     Comparison:comparison_helper.py:129 Column count of QA Processed File: 10
+INFO     Comparison:comparison_helper.py:130 Column count of both DEV Processed &amp; QA Processed files is equal!!
+INFO     Comparison:comparison_helper.py:138  
+INFO     Comparison:comparison_helper.py:140 Row count verification
+INFO     Comparison:comparison_helper.py:141 -----------------------
+INFO     Comparison:comparison_helper.py:144 Row count DEV Processed File: 1434
+INFO     Comparison:comparison_helper.py:145 Row count QA Processed File: 1434
+INFO     Comparison:comparison_helper.py:146 Row count of both DEV Processed &amp; QA Processed files is equal!<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">test_suite.py::TestInjestionAutomation::test_processed_data_comparison[MILITARYBENEFIT]</td>
+          <td class="col-duration">0.06</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log"> ------------------------------Captured stderr call------------------------------ <br/>  2020-01-02 16:50:45,966 - Comparison - Data Comparison
+  2020-01-02 16:50:45,966 - Comparison - ----------------
+  2020-01-02 16:50:46,025 - Comparison - DEV Processed &amp; QA Processed files are equal!!
+<br/> -------------------------------Captured log call-------------------------------- <br/>INFO     Comparison:comparison_helper.py:166 Data Comparison
+INFO     Comparison:comparison_helper.py:167 ----------------
+INFO     Comparison:comparison_helper.py:171 DEV Processed &amp; QA Processed files are equal!!<br/></div></td></tr></tbody></table></body></html>

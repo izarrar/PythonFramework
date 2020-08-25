@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."transfer_processed_dev"

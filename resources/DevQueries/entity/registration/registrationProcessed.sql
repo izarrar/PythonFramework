@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."registration_processed_data";

@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."course_raw_data"

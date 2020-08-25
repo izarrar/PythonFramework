@@ -1,0 +1,8 @@
+INFO     Comparison:comparison_helper.py:252 Additional column verification DEV Processed File
+INFO     Comparison:comparison_helper.py:253 -----------------------------------------------------
+INFO     Comparison:comparison_helper.py:264 rowguid additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:264 datapath additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:264 userid additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:264 groupentityexecutionid additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:264 recordinsertedtimestamp additional column exist in  DEV Processed file
+INFO     Comparison:comparison_helper.py:264 tenantid additional column exist in  DEV Processed file

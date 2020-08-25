@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."generalledgerreporting_processed_data"

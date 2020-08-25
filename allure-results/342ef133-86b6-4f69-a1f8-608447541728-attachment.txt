@@ -1,0 +1,11 @@
+INFO     Comparison:comparison_helper.py:124 Column count verification
+INFO     Comparison:comparison_helper.py:125 --------------------------
+INFO     Comparison:comparison_helper.py:128 Column count of DEV Raw File: 5
+INFO     Comparison:comparison_helper.py:129 Column count of QA Raw File: 5
+INFO     Comparison:comparison_helper.py:130 Column count of both DEV Raw & QA Raw files is equal!!
+INFO     Comparison:comparison_helper.py:138  
+INFO     Comparison:comparison_helper.py:140 Row count verification
+INFO     Comparison:comparison_helper.py:141 -----------------------
+INFO     Comparison:comparison_helper.py:148 Row count DEV Raw File: 1434
+INFO     Comparison:comparison_helper.py:149 Row count of QA Raw File: 601
+INFO     Comparison:comparison_helper.py:150 Row count of both DEV Raw & QA Raw is not equal!

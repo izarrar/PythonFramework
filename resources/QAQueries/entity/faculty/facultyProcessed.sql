@@ -1,0 +1,90 @@
+SELECT
+	personId,
+	recordActivityDate,
+	appointmentDecision,
+	appointmentDecisionDate,
+	appointmentStartDate,
+	appointmentEndDate,
+	CASE
+		WHEN facultyRankRaw IN ('1',
+		'3') THEN 'Lecturer'
+		WHEN facultyRankRaw IN ('2',
+		'4') THEN 'Professor'
+		WHEN facultyRankRaw IN ('5',
+		'6') THEN 'Instructor'
+		ELSE ''
+	END facultyRank,
+	primaryActivity,
+	tenureStatus,
+	tenureEffectiveDate,
+	tenureReviewDate,
+	nonTenureContractLength,
+	appointmentDecisionRaw,
+	facultyRankRaw,
+	primaryActivityRaw,
+	tenureStatusRaw,
+	nonTenureContractLengthRaw,
+	tenantId,
+	groupEntityExecutionId,
+	userId,
+	dataPath
+FROM
+	(
+	SELECT
+		PERAPPT.PERAPPT_PIDM personID,
+		PERAPPT.PERAPPT_ACTIVITY_DATE recordActivityDate,
+		CASE
+			WHEN PERAPPT.PERAPPT_DECISION = 'A' THEN 'Accepted'
+			WHEN PERAPPT.PERAPPT_DECISION = 'N' THEN 'Not Accepted'
+			ELSE ''
+		END appointmentDecision,
+		PERAPPT.PERAPPT_DECISION_DATE appointmentDecisionDate,
+		PERAPPT.PERAPPT_BEGIN_DATE appointmentStartDate,
+		PERAPPT.PERAPPT_END_DATE appointmentEndDate,
+		CASE
+			WHEN PERBFAC.PERBFAC_PRIMARY_ACTIVITY = 'null' THEN 'Administrative'
+			WHEN PERBFAC.PERBFAC_PRIMARY_ACTIVITY = 'R' THEN 'Research'
+			WHEN PERBFAC.PERBFAC_PRIMARY_ACTIVITY = 'I' THEN 'Instructional'
+			ELSE ''
+		END primaryActivity,
+		CASE
+			WHEN PERAPPT.PERAPPT_TENURE_CODE IN ('null',
+			'N') THEN 'Not on Tenure Track'
+			WHEN PERAPPT.PERAPPT_TENURE_CODE IN ('I',
+			'O') THEN 'On Tenure Track'
+			WHEN PERAPPT.PERAPPT_TENURE_CODE = 'T' THEN 'Tenured'
+			ELSE ''
+		END tenureStatus,
+		PERAPPT.PERAPPT_TENURE_EFF_DATE tenureEffectiveDate,
+		PERAPPT.PERAPPT_TENURE_REV_DATE tenureReviewDate,
+		CASE
+			WHEN PERAPPT.PERAPPT_NON_TENURE_CONTRACT = 'null' THEN 'Multi-year'
+			WHEN PERAPPT.PERAPPT_NON_TENURE_CONTRACT = 'A' THEN 'Annual'
+			WHEN PERAPPT.PERAPPT_NON_TENURE_CONTRACT = 'L' THEN 'Less than Annual'
+			ELSE ''
+		END nonTenureContractLength,
+		PERAPPT.PERAPPT_DECISION appointmentDecisionRaw,
+		NVL(PERRANK.PERRANK_RANK_CODE, CASE WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%ADJUNCT%' THEN 4 WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%ASSISTANT%' THEN 3 WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%ASST%' THEN 3 WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%ASSOC%' THEN 2 WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%INSTRUCTOR%' THEN 4 WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%LECTURER%' THEN 5 WHEN UPPER(PERBFAC_ACADEMIC_TITLE) LIKE '%PROFESSOR%' THEN 1 ELSE 6 END) facultyRankRaw,
+		PERBFAC.PERBFAC_PRIMARY_ACTIVITY primaryActivityRaw,
+		PERAPPT.PERAPPT_TENURE_CODE tenureStatusRaw,
+		PERAPPT.PERAPPT_NON_TENURE_CONTRACT nonTenureContractLengthRaw,
+		'37ae73e1-cbb3-4250-bfc2-54343450f1af' AS tenantId,
+		'134' AS groupEntityExecutionId,
+		'0afcf47a-3421-4875-89d8-0bcbbdd548a9' AS userId,
+		'processed-data/37ae73e1-cbb3-4250-bfc2-54343450f1af/23/2019-10-21 17:49:01' AS dataPath
+	FROM
+		PAYROLL.PERAPPT PERAPPT
+	LEFT JOIN PAYROLL.PERRANK PERRANK ON
+		PERAPPT.PERAPPT_PIDM = PERRANK.PERRANK_PIDM
+		AND PERRANK.PERRANK_BEGIN_DATE = (
+		SELECT
+			MAX(PERRANK2.PERRANK_BEGIN_DATE)
+		FROM
+			PAYROLL.PERRANK PERRANK2
+		WHERE
+			PERRANK2.PERRANK_PIDM = PERRANK.PERRANK_PIDM
+			AND PERRANK2.PERRANK_BEGIN_DATE <= PERAPPT.PERAPPT_BEGIN_DATE)
+	LEFT JOIN PAYROLL.PERBFAC PERBFAC ON
+		PERAPPT.PERAPPT_PIDM = PERBFAC.PERBFAC_PIDM
+	ORDER BY
+		1)

@@ -1,0 +1,1 @@
+SELECT * FROM "new-ingestion-database"."librarycirculationstatistic_raw_qa";
